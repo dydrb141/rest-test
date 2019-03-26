@@ -57,6 +57,11 @@
             <artifactId>h2</artifactId><!--데이터베이스의 의존성이 1개이상일때 특별한 데이터베이스의 접근 정보가 없다면 스프링 부트는 인메모리 디비를 사용하게 되어 있다. 따라서 테스트 스콥을 없애고 구동시키면 h2가 구동되게 됨.-->
            <!-- <scope>test</scope>-->
         </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.3.1</version>
+        </dependency>
     </dependencies>
 
     <build>

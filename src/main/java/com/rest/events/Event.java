@@ -2,6 +2,7 @@ package com.rest.events;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder
@@ -12,19 +13,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
+@Entity
 public class Event {
+    @Id
+    @GeneratedValue
     private Integer id;
     private String name;
     private String description;
     private LocalDateTime beginEnrollmentDateTime;
-    private LocalDateTime closeEnrollemntDateTime;
+    private LocalDateTime closeEnrollmentDateTime;
     private LocalDateTime beginEventDateTime;
     private LocalDateTime endEventDateTime;
     private String location;
     private int basePrice;
     private int maxPrice;
-    private boolean limitOfEnrollemnt;
+    private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
-    private EventStatus eventStatus;
+    @Enumerated(EnumType.STRING) //ODINAL은 이넘  순서에 따라 만들어 지기 때문에 순서가 변경되면 문제가 될 수 있어서 스트링을 사용하는게 좋다
+    private EventStatus eventStatus = EventStatus.DRAFT;
 }
