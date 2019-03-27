@@ -1,5 +1,6 @@
 package com.rest.events;
 
+import com.common.TestDescription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -63,6 +64,7 @@ public class EventControllerTests {
     }
 
     @Test
+    @TestDescription("정상적으로 생성하는 이벤트")
     public void createEvents() throws Exception {
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -90,6 +92,41 @@ public class EventControllerTests {
                 .andExpect(jsonPath("free").value(Matchers.not(true)))
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
     }
+
+    @Test
+    @TestDescription("입력 값이 빈 경우")
+    public void createEvent_Bad_Request_Empty_Input() throws Exception {
+        EventDto eventDto = EventDto.builder().build();
+        this.mockMvc.perform(post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .content(this.objectMapper.writeValueAsString(eventDto)))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @TestDescription("입력 값이 잘못된  경우")
+    public void createEvent_Bad_Request_Wrong_Input() throws Exception {
+        EventDto event = EventDto.builder()
+                .name("Spring")
+                .description("REST API Development")
+                .beginEnrollmentDateTime(LocalDateTime.of(2019, 3, 26, 10, 34))
+                .closeEnrollmentDateTime(LocalDateTime.of(2019, 2, 4, 10, 34))
+                .beginEventDateTime(LocalDateTime.of(2019, 3, 26, 10, 34))
+                .closeEnrollmentDateTime(LocalDateTime.of(2019, 2, 4, 10, 34))
+                .basePrice(10000)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("강남")
+                .build();
+
+        mockMvc.perform(post("/api/events/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(event)))
+                .andExpect(status().isBadRequest());
+    }
+
+
 
 
 }
